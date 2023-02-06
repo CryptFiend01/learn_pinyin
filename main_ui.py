@@ -13,10 +13,10 @@ class MainUI(Container):
         super().Create(screen)
         self.bgcolor = pygame.Color(120, 200, 33)
         startPics = []
-        self.startBtn.Make(screen, [440, 200], (200, 30), startPics, "开始游戏", self.onStartGame)
+        self.startBtn.Make(screen, [440, 200], (200, 30), startPics, u"开始游戏", self.onStartGame)
         self.addChild(self.startBtn)
         showPics = []
-        self.showBtn.Make(screen, [440, 400], (200, 30), showPics, "查看徽章", self.onShow)
+        self.showBtn.Make(screen, [440, 400], (200, 30), showPics, u"查看徽章", self.onShow)
         self.addChild(self.showBtn)
 
         self.addEvtListener(pygame.MOUSEBUTTONDOWN, self.onClick)

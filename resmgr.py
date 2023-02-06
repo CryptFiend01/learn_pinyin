@@ -1,5 +1,6 @@
 import pygame
 import json
+import random
 
 def Singleton(cls):
     _instance = {}
@@ -38,3 +39,10 @@ class ResMgr:
             self.fonts[name] = font
         return font
         
+    def getWord(self, difficult):
+        if difficult == 1:
+            g = self.difficults[0]
+            i = random.randint(1, len(g))
+            return g[i]
+        else:
+            return self.difficults[difficult-1][0]

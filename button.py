@@ -26,10 +26,10 @@ class Button(Container):
         self.text = txt
 
     def _drawSelf(self):
-        pos = [0, 0] # (self.surf.get_width() - self.text.get_width())/2
+        font = pygame.font.SysFont("fangsong", 24)
+        txt = font.render(self.text, True, pygame.Color(180, 180, 180))
+        pos = [(self.surf.get_width() - txt.get_width())/2, 3]
         # print(f'draw txt at {pos}')
-        font = pygame.font.SysFont("Consolas", 32)
-        txt = font.render(self.text, True, pygame.Color(0, 0, 0))
         self.surf.blit(txt, pos)
 
     def addClick(self, func):
