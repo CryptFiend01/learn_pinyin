@@ -28,7 +28,8 @@ class Button(Container):
         self.text = txt
 
     def _drawSelf(self):
-        font = pygame.font.SysFont("fangsong", 24)
+        res = ResMgr()
+        font = res.getFont("ui")
         txt = font.render(self.text, True, pygame.Color(180, 180, 180))
         pos = [(self.surf.get_width() - txt.get_width())/2, 3]
         # print(f'draw txt at {pos}')

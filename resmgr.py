@@ -16,6 +16,7 @@ class ResMgr:
     def __init__(self) -> None:
         self.imgs = {}
         self.fonts = {}
+        self.fontNames = {"ui":["fangsong", 24]}
 
     def Init(self):
         try:
@@ -33,9 +34,13 @@ class ResMgr:
         return img
 
     def getFont(self, name) -> pygame.font.Font:
+        fontType = self.fontNames.get(name)
+        if fontType == None:
+            return None
+
         font = self.fonts.get(name)
         if not font:
-            font = pygame.font.SysFont("Consolas", 32)
+            font = pygame.font.SysFont(fontType[0], fontType[1])
             self.fonts[name] = font
         return font
         
