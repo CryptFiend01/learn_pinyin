@@ -19,6 +19,8 @@ class Button(Container):
         self.Create(screen, pos, size)
         self.setText(txt)
         self.addClick(click)
+        self.name = f'button[{txt}]'
+        print(f"{self.name} rect: {self.rect}")
 
     def setText(self, txt):
         res = ResMgr()

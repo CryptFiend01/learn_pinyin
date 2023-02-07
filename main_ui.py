@@ -19,13 +19,12 @@ class MainUI(Container):
         self.showBtn.Make(screen, [440, 400], (200, 30), showPics, u"查看徽章", self.onShow)
         self.addChild(self.showBtn)
 
-        self.addEvtListener(pygame.MOUSEBUTTONDOWN, self.onClick)
+        self.addEvtListener(pygame.MOUSEBUTTONUP, self.onClick)
 
     def onClick(self, pos):
         print(f"click main ui {pos}.")
 
     def onStartGame(self, pos):
-        print(f"click pos {pos}")
         self.game.ChangeGameState(GAME_PLAY)
 
     def onShow(self, pos):

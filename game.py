@@ -81,6 +81,7 @@ class PinyinGame:
             pygame.display.flip()
 
 def main():
+    print(f'MOUSEBUTTONUP {pygame.MOUSEBUTTONUP}')
     game = PinyinGame()
     if game.Init():
         game.Run()

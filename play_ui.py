@@ -18,7 +18,7 @@ class PlayUI(Container):
     
     def update(self):
         diff = self.game.diff
-        speed = self.diff * 2 + 3
+        speed = diff * 2 + 3
         res = ResMgr()
         if self.word == '':
             self.word = res.getWord(diff)
