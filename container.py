@@ -24,7 +24,7 @@ class Container:
             w, h = screen.get_size()
             self.rect = pygame.Rect(pos[0], pos[1], w, h)
 
-    def onActive(self):
+    def onActive(self, args):
         pass
 
     def addEvtListener(self, evtType, func):

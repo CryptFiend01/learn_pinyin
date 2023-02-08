@@ -3,6 +3,7 @@ from pypinyin import pinyin, Style
 from pevent import PyEvent
 from resmgr import *
 from button import *
+from const import *
 import random
 
 class PlayUI(Container):
@@ -16,6 +17,8 @@ class PlayUI(Container):
         self.wordPos = [0, 0]
         self.wordColor = None
         self.score = 0
+        self.gate = None
+        self.wordCount = 0
 
         self.wordSurf = None
         self.pinyinSurf = None
@@ -24,7 +27,7 @@ class PlayUI(Container):
     def Create(self, screen):
         super().Create(screen)
         self.bgcolor = pygame.Color(150, 200, 0)
-        self.scoreSurf = pygame.Surface((250, 30), 0, screen)
+        self.scoreSurf = pygame.Surface((200, 40), 0, screen)
         self.addEvtListener(pygame.KEYUP, self.onKeyup)
         self.redrawScore()
 
@@ -38,8 +41,11 @@ class PlayUI(Container):
         self.wordSurf = None
         self.pinyinSurf = None
 
-    def onActive(self):
+    def onActive(self, args):
         self.score = 0
+        res = ResMgr()
+        self.gate = res.getGate(self.game.GetGate() + 1)
+        self.wordCount = 0
         self.nextRound()
     
     def update(self):
@@ -56,7 +62,9 @@ class PlayUI(Container):
             self.wordPos[0] = random.randint(100, 900)
             self.wordColor = pygame.Color(random.randint(0, 130), random.randint(0, 130), random.randint(0, 130))
             font = res.getFont("word")
+            font.set_bold(True)
             self.wordSurf = font.render(self.word, True, self.wordColor)
+            self.wordCount += 1
         else:
             self.wordPos[1] += speed
             if self.wordPos[1] > 768:
@@ -66,6 +74,8 @@ class PlayUI(Container):
         self.score += self.wordScore
         self.nextRound()
         self.redrawScore()
+        if self.wordCount >= self.gate['word_count']:
+            self.game.ChangeGameState(GAME_FINISH, {"score": self.score})
 
     def addKeyPinyin(self, k):
         self.input += k
@@ -89,15 +99,16 @@ class PlayUI(Container):
             self.redrawPinyin()
 
     def redrawScore(self):
-        self.scoreSurf.fill(COLOR_KEY)
+        self.scoreSurf.fill(pygame.Color(128, 128, 255))
         res = ResMgr()
-        font = res.getFont("word")
+        font = res.getFont("ui")
+        font.set_bold(True)
         score = font.render(f"{self.score}", True, pygame.Color(254, 215, 78))
-        self.scoreSurf.blit(score, (50, 0))
+        self.scoreSurf.blit(score, (30, 0))
 
     def redrawPinyin(self):
         res = ResMgr()
-        font = res.getFont("word")
+        font = res.getFont("ui")
         font.set_bold(True)
         self.pinyinSurf = font.render(self.input, True, pygame.Color(0, 64, 128))
 
@@ -106,4 +117,4 @@ class PlayUI(Container):
             self.surf.blit(self.wordSurf, self.wordPos)
         if self.pinyinSurf != None:
             self.surf.blit(self.pinyinSurf, (10, 728))
-        self.surf.blit(self.scoreSurf, (924, 724))
+        self.surf.blit(self.scoreSurf, (800, 724))

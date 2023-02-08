@@ -17,4 +17,7 @@ class HonorUI(Container):
 
     def onBackMain(self, pos):
         self.game.ChangeGameState(GAME_START)
+
+    def onActive(self, args):
+        honor = self.game.GetHonor()
         

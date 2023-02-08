@@ -80,8 +80,9 @@ class PinyinGame:
         ui.draw(self.surface)
         self.screen.blit(self.surface, (0, 0))
 
-    def ChangeGameState(self, state):
+    def ChangeGameState(self, state, args=None):
         self.gamestate = state
+        self.scenes[self.gamestate - 1].onActive(args)
 
     def Run(self):
         clock = pygame.time.Clock()
