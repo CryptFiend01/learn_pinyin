@@ -11,7 +11,10 @@ class MainUI(Container):
 
     def Create(self, screen):
         super().Create(screen)
-        self.bgcolor = pygame.Color(120, 200, 33)
+        # self.bgcolor = pygame.Color(120, 200, 33)
+        res = ResMgr()
+        self.bgImg = res.getImage("background_0.png")
+        self.bgImg = pygame.transform.scale(self.bgImg, (self.surf.get_width(), self.surf.get_height()))
         startPics = []
         self.startBtn.Make(screen, [440, 200], (200, 30), startPics, u"开始游戏", self.onStartGame)
         self.addChild(self.startBtn)

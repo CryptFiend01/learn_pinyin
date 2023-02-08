@@ -76,7 +76,7 @@ class Container:
     def draw(self, surf: pygame.Surface):
         self.surf.fill(self.bgcolor)
         if self.bgImg:
-            self.surf.blit(self.bgImg)
+            self.surf.blit(self.bgImg, (0, 0))
         self._drawSelf()
         surf.blit(self.surf, self.rect)
         for child in self.children:

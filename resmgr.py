@@ -45,7 +45,7 @@ class ResMgr:
     def getImage(self, name) -> pygame.Surface:
         img = self.imgs.get(name)
         if not img:
-            img = pygame.image.load("assets/" + name).convert_alpha()
+            img = pygame.image.load("assets/pics/" + name).convert_alpha()
             self.imgs[name] = img
         return img
 
