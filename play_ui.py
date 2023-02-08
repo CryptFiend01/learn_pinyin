@@ -19,6 +19,7 @@ class PlayUI(Container):
         self.score = 0
         self.gate = None
         self.wordCount = 0
+        self.skip = 0
 
         self.wordSurf = None
         self.pinyinSurf = None
@@ -46,11 +47,12 @@ class PlayUI(Container):
         res = ResMgr()
         self.gate = res.getGate(self.game.GetGate() + 1)
         self.wordCount = 0
+        self.skip = 0
         self.nextRound()
     
     def update(self):
         gate = self.game.GetGate()
-        speed = gate + 0.5
+        speed = self.gate['speed']
         res = ResMgr()
         if self.word == '':
             self.word, self.wordScore = res.getWord(gate)
@@ -60,22 +62,25 @@ class PlayUI(Container):
                 self.pinyin = pinyin(self.word, style=Style.TONE3, heteronym=True)
             print(self.pinyin)
             self.wordPos[0] = random.randint(100, 900)
-            self.wordColor = pygame.Color(random.randint(0, 130), random.randint(0, 130), random.randint(0, 130))
+            self.wordColor = pygame.Color(random.randint(0, 180), random.randint(0, 180), random.randint(0, 180))
             font = res.getFont("word")
             font.set_bold(True)
             self.wordSurf = font.render(self.word, True, self.wordColor)
             self.wordCount += 1
         else:
-            self.wordPos[1] += speed
-            if self.wordPos[1] > 768:
-                self.nextRound()
+            self.skip += 1
+            if self.skip == self.gate['skip']:
+                self.skip = 0
+                self.wordPos[1] += speed
+                if self.wordPos[1] > 768:
+                    self.nextRound()
 
     def addScore(self):
         self.score += self.wordScore
         self.nextRound()
         self.redrawScore()
         if self.wordCount >= self.gate['word_count']:
-            self.game.ChangeGameState(GAME_FINISH, {"score": self.score})
+            self.game.ChangeGameState(GAME_FINISH, {"score": self.score, "finish":self.score >= self.gate['finish_score']})
 
     def addKeyPinyin(self, k):
         self.input += k

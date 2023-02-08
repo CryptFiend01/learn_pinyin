@@ -1,8 +1,8 @@
 [
-    {"gate":1, "word_count": 10, "finish_score": 80, "difficult": 1},
-    {"gate":2, "word_count": 12, "finish_score": 100, "difficult": 1},
-    {"gate":3, "word_count": 15, "finish_score": 120, "difficult": 1},
-    {"gate":4, "word_count": 12, "finish_score": 160, "difficult": 2},
-    {"gate":5, "word_count": 16, "finish_score": 240, "difficult": 2},
-    {"gate":6, "word_count": 20, "finish_score": 280, "difficult": 2}
+    {"gate":1, "speed": 1, "skip": 2, "word_count": 10, "finish_score": 80, "difficult": 1},
+    {"gate":2, "speed": 1, "skip": 2, "word_count": 12, "finish_score": 100, "difficult": 1},
+    {"gate":3, "speed": 1, "skip": 2, "word_count": 15, "finish_score": 120, "difficult": 1},
+    {"gate":4, "speed": 1, "skip": 2, "word_count": 12, "finish_score": 160, "difficult": 2},
+    {"gate":5, "speed": 1, "skip": 2, "word_count": 16, "finish_score": 240, "difficult": 2},
+    {"gate":6, "speed": 1, "skip": 2, "word_count": 20, "finish_score": 280, "difficult": 2}
 ]

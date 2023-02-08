@@ -64,6 +64,8 @@ class PinyinGame:
 
     def AddGate(self):
         self.data["gate"] += 1
+        if self.data['gate'] % 3 == 0:
+            self.data['honor'] += 1
         self.saveData()
 
     def AddHonor(self):

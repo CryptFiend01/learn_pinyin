@@ -16,7 +16,7 @@ class ResMgr:
     def __init__(self) -> None:
         self.imgs = {}
         self.fonts = {}
-        self.fontNames = {"ui":["fangsong", 24], "word":["fangsong", 36]}
+        self.fontNames = {"ui":["fangsong", 24], "word":["fangsong", 36], "finish":["fangsong", 80]}
 
     def Init(self):
         if not self.loadWords():

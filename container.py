@@ -41,7 +41,8 @@ class Container:
     def removeChild(self, child):
         self.worldPos = [0, 0]
         child.parent = None
-        self.children.remove(child)
+        if child in self.children:
+            self.children.remove(child)
 
     def dispatchEvts(self, evts):
         for child in self.children:
