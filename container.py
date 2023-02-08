@@ -24,6 +24,9 @@ class Container:
             w, h = screen.get_size()
             self.rect = pygame.Rect(pos[0], pos[1], w, h)
 
+    def onActive(self):
+        pass
+
     def addEvtListener(self, evtType, func):
         self.evtCalls[evtType] = func
 
@@ -50,13 +53,17 @@ class Container:
             epos = evt.pos
             if evt.type == pygame.MOUSEBUTTONUP:
                 print(f"evt.pos: {evt.pos} worldpos: {self.worldPos}")
-                epos = [evt.pos[0] - self.parent.worldPos[0], evt.pos[1] - self.parent.worldPos[1]]
+                if self.parent != None:
+                    epos = [evt.pos[0] - self.parent.worldPos[0], evt.pos[1] - self.parent.worldPos[1]]
                 if epos[0] < 0 or epos[1] < 0 or not self.rect.collidepoint(epos):
                     print(f'{self.name} skip evt {evt.type}')
                     continue
             func = self.evtCalls.get(evt.type)
             if func != None:
-                func(epos)
+                if evt.type == pygame.MOUSEBUTTONUP:
+                    func(epos)
+                else:
+                    func(evt)
                 evt.done = True
 
     def update(self):

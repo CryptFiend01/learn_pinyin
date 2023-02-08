@@ -11,6 +11,7 @@ from honor_ui import *
 from play_ui import *
 from const import *
 from pevent import PyEvent
+import os
 
 @Singleton
 class PinyinGame:
@@ -18,7 +19,7 @@ class PinyinGame:
         self.gamestate = GAME_START
         self.screen = None
         self.surface = None
-        self.diff = 0
+        self.data = {"gate":0, "honor":0}
         self.scenes = []
 
     def Init(self):
@@ -30,6 +31,13 @@ class PinyinGame:
         res = ResMgr()
         if not res.Init():
             return False
+
+        if os.path.exists('save.json'):
+            try:
+                self.data = json.load(open("save.json", "r"))
+            except Exception as e:
+                print(f"load save.json error: {str(e)}")
+                return False
 
         mainUI = MainUI(self)
         mainUI.Create(self.screen)
@@ -47,6 +55,23 @@ class PinyinGame:
         honorUI.Create(self.screen)
         self.scenes.append(honorUI)
         return True
+
+    def GetGate(self):
+        return self.data["gate"]
+
+    def GetHonor(self):
+        return self.data["honor"]
+
+    def AddGate(self):
+        self.data["gate"] += 1
+        self.saveData()
+
+    def AddHonor(self):
+        self.data["honor"] += 1
+        self.saveData()
+
+    def saveData(self):
+        json.dump(self.data, open("save.json", 'w'))
 
     def draw(self):
         self.screen.fill(pygame.Color(0, 0, 0))
@@ -69,10 +94,10 @@ class PinyinGame:
                     sys.exit()
                 else:
                     e = PyEvent(evt.type)
-                    if evt.type == pygame.MOUSEBUTTONUP:
+                    if evt.type == pygame.MOUSEBUTTONUP or evt.type == pygame.MOUSEBUTTONDOWN:
                         print(f"mouseup {evt.pos}")
                         e.pos[0], e.pos[1] = evt.pos[0], evt.pos[1]
-                    elif evt.type == pygame.KEYDOWN:
+                    elif evt.type == pygame.KEYDOWN or evt.type == pygame.KEYUP:
                         e.key = evt.key
                     evts.append(e)
             self.scenes[self.gamestate-1].dispatchEvts(evts)

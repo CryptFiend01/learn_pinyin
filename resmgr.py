@@ -16,7 +16,7 @@ class ResMgr:
     def __init__(self) -> None:
         self.imgs = {}
         self.fonts = {}
-        self.fontNames = {"ui":["fangsong", 24]}
+        self.fontNames = {"ui":["fangsong", 24], "word":["fangsong", 36]}
 
     def Init(self):
         try:
@@ -45,9 +45,27 @@ class ResMgr:
         return font
         
     def getWord(self, difficult):
-        if difficult == 1:
-            g = self.difficults[0]
-            i = random.randint(1, len(g))
-            return g[i]
+        d = 0
+        if difficult <= 0 or difficult > len(self.difficults):
+            d = random.randint(0, len(self.difficults)-1)
         else:
-            return self.difficults[difficult-1][0]
+            # 根据难度距离difficult远近来决定权重
+            weights = [1] * len(self.difficults)
+            # 指定位置权重最高，离得越远权重越低
+            rateadds = [10, 5, 2, 1, 0]
+            for i in range(len(self.difficults)):
+                n = abs(i + 1 - difficult)
+                weights[i] += rateadds[n]
+            # 根据权重随机难度组
+            total = sum(weights)
+            rd = random.randint(1, total)
+            w = 0
+            for i in range(len(weights)):
+                w += weights[i]
+                if w >= rd:
+                    d = i
+                    break
+        # 根据难度组随机汉字，并返还该字对应的分数
+        g = self.difficults[d]
+        i = random.randint(1, len(g)) - 1
+        return g[i], (d + 1) * 10
