@@ -1,6 +1,7 @@
 import pygame
+from resmgr import ResMgr
 
-COLOR_KEY = pygame.Color(0, 1, 0)
+COLOR_KEY = pygame.Color(0, 13, 0)
 
 class Container:
     def __init__(self, game) -> None:
@@ -23,6 +24,17 @@ class Container:
             self.surf = pygame.Surface(screen.get_size(), 0, screen)
             w, h = screen.get_size()
             self.rect = pygame.Rect(pos[0], pos[1], w, h)
+        self.surf.set_colorkey(COLOR_KEY)
+
+    def setBackground(self, imgpath):
+        res = ResMgr()
+        self.setBackgroundImg(res.getImage(imgpath))
+    
+    def setBackgroundImg(self, img: pygame.Surface):
+        if img.get_width() != self.surf.get_width() or img.get_height() != self.surf.get_height():
+            self.bgImg = pygame.transform.scale(img, (self.surf.get_width(), self.surf.get_height()))
+        else:
+            self.bgImg = img
 
     def onActive(self, args):
         pass

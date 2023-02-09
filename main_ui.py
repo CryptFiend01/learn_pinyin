@@ -12,14 +12,12 @@ class MainUI(Container):
     def Create(self, screen):
         super().Create(screen)
         # self.bgcolor = pygame.Color(120, 200, 33)
-        res = ResMgr()
-        self.bgImg = res.getImage("background_0.png")
-        self.bgImg = pygame.transform.scale(self.bgImg, (self.surf.get_width(), self.surf.get_height()))
-        startPics = []
-        self.startBtn.Make(screen, [440, 200], (200, 30), startPics, u"开始游戏", self.onStartGame)
+        self.setBackground("background_0.png")
+        startPics = ["anniu-kaishi.png", "anniu-kaishi_sel.png"]
+        self.startBtn.Make(screen, [440, 200], (238, 84), startPics, u"开始游戏", self.onStartGame)
         self.addChild(self.startBtn)
-        showPics = []
-        self.showBtn.Make(screen, [440, 400], (200, 30), showPics, u"查看徽章", self.onShow)
+        showPics = ["general_btn_share_nor.png", "general_btn_share_sel.png"]
+        self.showBtn.Make(screen, [440, 400], (238, 84), showPics, u"查看徽章", self.onShow)
         self.addChild(self.showBtn)
 
         self.addEvtListener(pygame.MOUSEBUTTONUP, self.onClick)

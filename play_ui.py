@@ -28,9 +28,7 @@ class PlayUI(Container):
     def Create(self, screen):
         super().Create(screen)
         # self.bgcolor = pygame.Color(150, 200, 0)
-        res = ResMgr()
-        self.bgImg = res.getImage("background_2.png")
-        self.bgImg = pygame.transform.scale(self.bgImg, (self.surf.get_width(), self.surf.get_height()))
+        self.setBackground("background_2.png")
         self.scoreSurf = pygame.Surface((200, 40), 0, screen)
         self.addEvtListener(pygame.KEYUP, self.onKeyup)
         self.redrawScore()
@@ -87,7 +85,7 @@ class PlayUI(Container):
 
     def addKeyPinyin(self, k):
         self.input += k
-        print(f"input: {self.input}")
+        # print(f"input: {self.input}")
         self.redrawPinyin()
         for i in range(len(self.pinyin[0])):
             if self.input == self.pinyin[0][i]:

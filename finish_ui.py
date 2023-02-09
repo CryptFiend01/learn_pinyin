@@ -9,11 +9,12 @@ class FinishUI(Container):
         self.nextButton = Button(game)
         self.retryButton = Button(game)
         self.exitButton = Button(game)
-        self.bgcolor = pygame.Color(202,71,15)
         self.scoreSurf = None
 
     def Create(self, screen: pygame.Surface):
         super().Create(screen)
+
+        self.bgcolor = pygame.Color(202,71,15)
 
         self.nextButton.Make(screen, [160, 600], (80, 30), [], u"下一关", self.onNext)
         self.retryButton.Make(screen, [160, 600], (80, 30), [], u"再试一次", self.onRetry)
