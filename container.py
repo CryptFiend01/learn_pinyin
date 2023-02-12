@@ -1,7 +1,5 @@
 import pygame
-from resmgr import ResMgr
-
-COLOR_KEY = pygame.Color(0, 13, 0)
+from resmgr import *
 
 class Container:
     def __init__(self, game) -> None:
@@ -35,6 +33,15 @@ class Container:
             self.bgImg = pygame.transform.scale(img, (self.surf.get_width(), self.surf.get_height()))
         else:
             self.bgImg = img
+
+        alphas = pygame.surfarray.array_alpha(self.bgImg)
+        self.bgImg.lock()
+        for i in range(len(alphas)):
+            sz = len(alphas[i])
+            for j in range(sz):
+                if alphas[i][j] == 0:
+                    self.bgImg.set_at([i,j], COLOR_KEY)
+        self.bgImg.unlock()
 
     def onActive(self, args):
         pass

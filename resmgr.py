@@ -2,6 +2,8 @@ import pygame
 import json
 import random
 
+COLOR_KEY = pygame.Color(0, 13, 0)
+
 def Singleton(cls):
     _instance = {}
 
@@ -16,7 +18,7 @@ class ResMgr:
     def __init__(self) -> None:
         self.imgs = {}
         self.fonts = {}
-        self.fontNames = {"ui":["fangsong", 24], "word":["fangsong", 36], "finish":["fangsong", 80]}
+        self.fontNames = {"ui":["fangsong", 24], "word":["fangsong", 36], "pinyin":["fangsong", 48], "finish":["fangsong", 80]}
 
     def Init(self):
         if not self.loadWords():
@@ -46,8 +48,33 @@ class ResMgr:
         img = self.imgs.get(name)
         if not img:
             img = pygame.image.load("assets/pics/" + name).convert_alpha()
+            if name == 'num-daojushu.png':
+                img = pygame.transform.scale(img, (img.get_width()*3, img.get_height()*3))
             self.imgs[name] = img
         return img
+
+    def getScoreSurf(self, num, pic):
+        sn = str(num)
+        imgNum = self.getImage(pic)
+        w = imgNum.get_width() / 10
+        h = imgNum.get_height()
+        length = len(sn)
+        surf = pygame.Surface((w * length, h))
+        surf.set_colorkey(COLOR_KEY)
+        surf.fill(COLOR_KEY)
+        for i in range(length):
+            n = int(sn[i])
+            surf.blit(imgNum, (i*w, 0, w, h), (n*w, 0, w, h))
+        return surf
+
+    def getScoreNum(self, num):
+        return self.getScoreSurf(num, "score.png")
+
+    def getGateNum(self, num):
+        return self.getScoreSurf(num, "score_green.png")
+
+    def getFinishScoreNum(self, num):
+        return self.getScoreSurf(num, "num-daojushu.png")
 
     def getFont(self, name) -> pygame.font.Font:
         fontType = self.fontNames.get(name)
@@ -90,3 +117,13 @@ class ResMgr:
         if gate < 1 or gate > len(self.gates):
             return None
         return self.gates[gate - 1]
+
+    def randomColor(self):
+        main = random.randint(200, 255)
+        idx = random.randint(1, 3)
+        color = [0, 0, 0]
+        color[idx-1] = main
+        for i in range(3):
+            if color[i] == 0:
+                color[i] = random.randint(0, 255)
+        return pygame.Color(color[0], color[1], color[2])
