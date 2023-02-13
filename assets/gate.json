@@ -9,9 +9,13 @@
     {"gate":8, "speed": 1, "skip": 2, "word_count": 20, "finish_score": 230, "difficult": 2},
     {"gate":9, "speed": 1, "skip": 2, "word_count": 20, "finish_score": 98, "difficult": 2},
     {"gate":10, "speed": 1, "skip": 2, "word_count": 20, "finish_score": 345, "difficult": 2},
-    {"gate":11, "speed": 1,  "skip":2,  "word_count":15,  "finish_score":80,    "difficult":2 }   
-    
-    
+    {"gate":11, "speed": 1,  "skip":2,  "word_count":15,  "finish_score":80,    "difficult":2 } ,
+    {"gate":12,  "speed":1,  "skip":2,   "word_count":20,  "finish_score":200,   "difficult":2} ,
+    {"gate":13,   "speed":1,  "skip":2,   "word_count":0,   "finish_score":213,   "difficult":2},
+    {"gate":14,   "speed":1,  "skip":2,   "word_count":0,   "finish_score":213,   "difficult":2},
+    {"gate":15,   "speed":1,  "skip":2,   "word_count":0,   "finish_score":213,   "difficult":2}
+
+
 
     
 
