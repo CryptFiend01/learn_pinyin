@@ -16,7 +16,7 @@ class HonorUI(Container):
         super().Create(screen)
         # self.bgcolor = pygame.Color(255, 222, 198)
         self.setBackground("honor_bg.jpg")
-        self.backBtn.Make(screen, (10, 10), (94, 94), ["general_btn_back_nor.png"], "<-", self.onBackMain)
+        self.backBtn.Make(screen, (10, 10), (94, 94), ["general_btn_back_sel.png"], "<-", self.onBackMain)
         self.addChild(self.backBtn)
 
         res = ResMgr()

@@ -1,6 +1,9 @@
 import pygame
 from resmgr import *
 
+# 对PNG透明贴图到图层后再绘制到另一图层进行了处理，创建surface时使用参数pygame.SRCALPHA，不能设置colorkey
+# 这种其实应该直接将图片绘制到目标层
+# 当需要反复重绘某个图层时，该图层上已经贴了png图片，再将此图层贴到另外的层上，会出现黑边
 class Container:
     def __init__(self, game) -> None:
         self.surf = None
@@ -13,16 +16,16 @@ class Container:
         self.bgImg = None
         self.game = game
         self.name = ''
+        self.isredraw = True
 
     def Create(self, screen: pygame.Surface, pos=(0,0), size=None):
         if size != None:
-            self.surf = pygame.Surface(size, 0, screen)
+            self.surf = pygame.Surface(size, pygame.SRCALPHA, screen)
             self.rect = pygame.Rect(pos, size)
         else:
-            self.surf = pygame.Surface(screen.get_size(), 0, screen)
+            self.surf = pygame.Surface(screen.get_size(), pygame.SRCALPHA, screen)
             w, h = screen.get_size()
             self.rect = pygame.Rect(pos[0], pos[1], w, h)
-        self.surf.set_colorkey(COLOR_KEY)
 
     def setBackground(self, imgpath):
         res = ResMgr()
@@ -92,11 +95,18 @@ class Container:
     def _drawSelf(self):
         pass
 
-    def draw(self, surf: pygame.Surface):
-        self.surf.fill(self.bgcolor)
+    def redrawOnce(self):
         if self.bgImg:
             self.surf.blit(self.bgImg, (0, 0))
         self._drawSelf()
+        self.isredraw = False
+
+    def draw(self, surf: pygame.Surface):
+        if self.isredraw:
+            self.surf.fill(self.bgcolor)
+            if self.bgImg:
+                self.surf.blit(self.bgImg, (0, 0))
+            self._drawSelf()
         surf.blit(self.surf, self.rect)
         for child in self.children:
             child.draw(surf)

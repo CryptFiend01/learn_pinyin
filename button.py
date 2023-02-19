@@ -9,6 +9,7 @@ class Button(Container):
         self.redraw = False
 
     def Make(self, screen, pos, size, pics, txt, click):
+        self.Create(screen, pos, size)
         if len(pics) == 0:
             self.bgcolor = pygame.Color(50, 100, 200)
         else:
@@ -16,7 +17,7 @@ class Button(Container):
             for pic in pics:
                 self.pics.append(res.getImage("button/" + pic))
             self.bgImg = self.pics[0]
-        self.Create(screen, pos, size)
+            self.redrawOnce()
         self.setText(txt)
         self.addClick(click)
         self.name = f'button[{txt}]'
