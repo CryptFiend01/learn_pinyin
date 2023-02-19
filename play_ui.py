@@ -20,12 +20,21 @@ class PlayUI(Container):
         self.gate = None
         self.wordCount = 0
         self.skip = 0
+        self.state = STATE_PLAY
+        self.pinyinPos = [490, 600]
+        self.pinyinTarget = [810, 710]
+        self.pinyinSpeed = [32, 11]
+        self.addScoreStart = [930, 700]
+        self.addScoreTarget = [930, 640]
+        self.addScorePos = [self.addScoreStart[0], self.addScoreStart[1]]
+        self.isDrawAddScore = False
 
         self.wordSurf = None
         self.pinyinSurf = None
         self.scoreSurf = None
         self.gateSurf = None
         self.scorePanel = None
+        self.addScoreSurf = None
 
     def Create(self, screen):
         super().Create(screen)
@@ -46,6 +55,10 @@ class PlayUI(Container):
         self.gateSurf.set_colorkey(COLOR_KEY)
         self.gateSurf.fill(COLOR_KEY)
 
+        self.addScoreSurf = pygame.Surface((100, 50), 0, screen)
+        self.addScoreSurf.set_colorkey(COLOR_KEY)
+        self.addScoreSurf.fill(COLOR_KEY)
+
     def nextRound(self):
         self.input = ''
         self.word = ''
@@ -63,6 +76,7 @@ class PlayUI(Container):
         self.gate = res.getGate(gate)
         self.wordCount = 0
         self.skip = 0
+        self.state = STATE_PLAY
 
         bg = res.getImage("guanqia.png")
         self.gateSurf.fill(COLOR_KEY)
@@ -91,13 +105,33 @@ class PlayUI(Container):
             self.wordSurf = font.render(self.word, True, self.wordColor)
             self.wordCount += 1
         else:
-            self.skip += 1
-            if self.skip == self.gate['skip']:
+            if self.state == STATE_PLAY:
+                self.skip += 1
+                if self.skip == self.gate['skip']:
+                    self.skip = 0
+                    self.wordPos[1] += speed
+                    if self.wordPos[1] > 768:
+                        self.nextRound()
+                        self.finishGate()
+            elif self.state == STATE_PINYIN_DOWN:
+                self.skip += 1
+                if self.skip < 10:
+                    return
                 self.skip = 0
-                self.wordPos[1] += speed
-                if self.wordPos[1] > 768:
-                    self.nextRound()
-                    self.finishGate()
+                if self.pinyinPos != self.pinyinTarget:
+                    self.pinyinPos[0] += self.pinyinSpeed[0]
+                    self.pinyinPos[1] += self.pinyinSpeed[1]
+                else:
+                    self.pinyinDownFinish()
+        if self.isDrawAddScore:
+            if self.addScorePos != self.addScoreTarget:
+                self.addScorePos[1] -= 1
+                alpha = self.addScoreSurf.get_alpha() or 255
+                self.addScoreSurf.set_alpha(alpha - 4)
+            else:
+                self.isDrawAddScore = False
+                self.addScorePos[0], self.addScorePos[1] = self.addScoreStart[0], self.addScoreStart[1]
+                self.addScoreSurf.set_alpha(255)
 
     def finishGate(self):
         if self.wordCount >= self.gate['word_count']:
@@ -110,9 +144,22 @@ class PlayUI(Container):
 
     def addScore(self):
         self.score += self.wordScore
+        self.isDrawAddScore = True
+        self.redrawAddScore(self.wordScore)
         self.nextRound()
         self.redrawScore()
         self.finishGate()
+
+    def pinyinSuccess(self, i):
+        self.state = STATE_PINYIN_DOWN
+        self.input = pinyin(self.word, style=Style.TONE, heteronym=True)[0][i]
+        self.redrawPinyin()
+        self.skip = 0
+
+    def pinyinDownFinish(self):
+        self.state = STATE_PLAY
+        self.pinyinPos = [490, 600]
+        self.addScore()
 
     def addKeyPinyin(self, k):
         self.input += k
@@ -120,7 +167,7 @@ class PlayUI(Container):
         self.redrawPinyin()
         for i in range(len(self.pinyin[0])):
             if self.input == self.pinyin[0][i]:
-                self.addScore()
+                self.pinyinSuccess(i)
                 break
 
     def onKeyup(self, evt: PyEvent):
@@ -153,12 +200,23 @@ class PlayUI(Container):
         font.set_bold(True)
         self.pinyinSurf = font.render(self.input, True, pygame.Color(230, 184, 108))
 
+    def redrawAddScore(self, score):
+        res = ResMgr()
+        add = res.getImage("zuanshi+.png")
+        self.addScoreSurf.fill(COLOR_KEY)
+        self.addScoreSurf.blit(add, (0, 2))
+        scoreimg = res.getScoreNum(score)
+        self.addScoreSurf.blit(scoreimg, (45, 10))
+
     def _drawSelf(self):
         if self.wordSurf != None:
             self.surf.blit(self.wordSurf, self.wordPos)
-        if self.pinyinSurf != None:
-            self.surf.blit(self.pinyinSurf, (490, 600))
         self.surf.blit(self.scoreSurf, (810, 714))
+        if self.pinyinSurf != None:
+            self.surf.blit(self.pinyinSurf, self.pinyinPos)
+
+        if self.isDrawAddScore:
+            self.surf.blit(self.addScoreSurf, self.addScorePos)
 
         x = (self.surf.get_width() - self.gateSurf.get_width()) / 2
         self.surf.blit(self.gateSurf, (x, 20))

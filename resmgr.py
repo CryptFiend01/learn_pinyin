@@ -31,6 +31,7 @@ class ResMgr:
     def loadWords(self):
         try:
             self.words = json.load(open('assets/word.json', 'r', encoding='utf-8'))
+            print(self.words)
         except Exception as e:
             print(f"load word.json error: {str(e)}")
             return False
