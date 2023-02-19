@@ -28,6 +28,7 @@ class PlayUI(Container):
         self.addScoreTarget = [930, 640]
         self.addScorePos = [self.addScoreStart[0], self.addScoreStart[1]]
         self.isDrawAddScore = False
+        self.sounds = []
 
         self.wordSurf = None
         self.pinyinSurf = None
@@ -58,6 +59,9 @@ class PlayUI(Container):
         self.addScoreSurf = pygame.Surface((100, 50), 0, screen)
         self.addScoreSurf.set_colorkey(COLOR_KEY)
         self.addScoreSurf.fill(COLOR_KEY)
+
+        self.sounds.append(pygame.mixer.Sound("assets/sounds/snd_input.mp3"))
+        self.sounds.append(pygame.mixer.Sound("assets/sounds/snd_score.mp3"))
 
     def nextRound(self):
         self.input = ''
@@ -157,6 +161,7 @@ class PlayUI(Container):
         self.skip = 0
 
     def pinyinDownFinish(self):
+        self.sounds[SND_SCORE-1].play()
         self.state = STATE_PLAY
         self.pinyinPos = [490, 600]
         self.addScore()
@@ -171,9 +176,12 @@ class PlayUI(Container):
                 break
 
     def onKeyup(self, evt: PyEvent):
+        if self.state != STATE_PLAY:
+            return
         alphas = "abcdefghijklmnopqrstuvwxyz"
         digist = "1234"
         # print(f'pygame.K_a: {pygame.K_a} pygame.K_z: {pygame.K_z} evt.key: {evt.key}')
+        self.sounds[SND_INPUT-1].play()
         if evt.key >= pygame.K_a and evt.key <= pygame.K_z:
             self.addKeyPinyin(alphas[evt.key - pygame.K_a])
         elif evt.key >= pygame.K_1 and evt.key <= pygame.K_4:

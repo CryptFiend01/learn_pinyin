@@ -24,6 +24,7 @@ class PinyinGame:
 
     def Init(self):
         pygame.init()
+        pygame.mixer.init()
         self.screen = pygame.display.set_mode((1024, 768), 0, 32)
         self.surface = pygame.Surface(self.screen.get_size(), 0, self.screen)
         self.surface.set_colorkey(COLOR_KEY)
@@ -54,6 +55,8 @@ class PinyinGame:
         honorUI = HonorUI(self)
         honorUI.Create(self.screen)
         self.scenes.append(honorUI)
+
+        self.playMusic("main_back0")
         return True
 
     def GetGate(self):
@@ -82,9 +85,18 @@ class PinyinGame:
         ui.draw(self.surface)
         self.screen.blit(self.surface, (0, 0))
 
+    def playMusic(self, name):
+        pygame.mixer.music.load(f"assets/sounds/{name}.mp3")
+        pygame.mixer.music.play()
+
     def ChangeGameState(self, state, args=None):
         self.gamestate = state
         self.scenes[self.gamestate - 1].onActive(args)
+        pygame.mixer.music.unload()
+        if self.gamestate == GAME_PLAY:
+            self.playMusic("game_level")
+        else:
+            self.playMusic("main_back0")
 
     def Run(self):
         clock = pygame.time.Clock()
