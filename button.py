@@ -15,7 +15,10 @@ class Button(Container):
         else:
             res = ResMgr()
             for pic in pics:
-                self.pics.append(res.getImage("button/" + pic))
+                img = res.getImage("button/" + pic)
+                if img.get_size() != self.surf.get_size():
+                    img = pygame.transform.scale(img, self.surf.get_size())
+                self.pics.append(img)
             self.bgImg = self.pics[0]
             self.redrawOnce()
         self.setText(txt)

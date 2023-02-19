@@ -48,12 +48,12 @@ class FinishUI(Container):
         self.game.ChangeGameState(GAME_PLAY)
 
     def _drawSelf(self):
-        self.surf.blit(self.scoreSurf, (480, 380))
+        self.surf.blit(self.scoreSurf, (550, 220))
         res = ResMgr()
         pic = res.getImage("101.png")
         x = (self.diamondIndex % 4) * 128 + 512
         y = (self.diamondIndex // 4) * 128 + 512
-        self.surf.blit(pic, (280, 360), (x, y, 128, 128))
+        self.surf.blit(pic, (350, 200), (x, y, 128, 128))
         self.diamondSkip += 1
         if self.diamondSkip >= 12:
             self.diamondSkip = 0
